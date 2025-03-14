@@ -1,0 +1,86 @@
+? low-salt pseudo random numbers generator
+start
+
+? f(x) = ( (a * x + c) mod m ) mod 100 + 1
+? perfect solution with:
+? 	a = 1664525
+? 	c = 1013904223
+? 	m = 2**32
+? 	x = timestamp
+
+? out solution with sqrt a c m, -6/7 digits x
+
+new random number
+new x number
+new a number
+new c number 
+new m number
+
+new i number
+
+new count number
+new table_count number
+new random_line string
+set table_count 0
+loop random_table (10 > table_count)
+  set random_line ""
+  set count 0
+  loop random_100 (10 > count)
+
+    set random 0
+    set x TIME - 1741946000000
+    set a 1290
+    set c 31841
+    set m 65536
+
+    set i 0
+
+    loop ax (a > i)
+      set i i + 1
+      set random random + x
+    end ax
+
+    set random random + c
+
+    loop mod_c (random > c)
+      set random random - c
+    end mod_c
+
+    loop mod_100 (random > 100)
+      set random random - 100
+    end mod_100
+  
+    if (random > 100)
+      set random random - 1
+    close
+
+    set random random + 1
+
+    if (random > 99)
+      set random_line random_line + binary(random) + " / "
+    else
+      if (random > 9)
+        set random_line random_line + binary(random) + " _/ "
+      else
+        set random_line random_line + binary(random) + " _/_  "
+      close
+    close
+
+    set count count + 1
+  end random_100
+  log string random_line
+  set table_count table_count + 1
+end random_table
+  
+delete x
+delete a
+delete c
+delete m
+
+delete i
+
+delete count
+delete table_count
+delete random_line
+
+finish
